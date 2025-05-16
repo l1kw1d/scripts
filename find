@@ -1,0 +1,7 @@
+find /home/username -name ".bash_history*" -type f | while read -r file; do 
+    if grep -Eiq 's3|gdrive|mount' "$file"; then 
+        echo "✅ $file contient des commandes s3, gdrive, ou mount."
+    else 
+        echo "❌ $file ne contient pas ces commandes."
+    fi
+done
