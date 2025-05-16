@@ -11,16 +11,12 @@ echo "Date: $(date)" >> "$OUTPUT_FILE"
 echo "" >> "$OUTPUT_FILE"
 
 # Transmission Analysis
-echo "=== Transmission Analysis ===" >> "$OUTPUT_FILE"
+echo "=== Transmission Analysis (23 March - 5 April 2025) ===" >> "$OUTPUT_FILE"
 TRANSMISSION_DIR="$HOME/.config/transmission"
 if [ -d "$TRANSMISSION_DIR" ]; then
     echo "[+] Transmission configuration found." >> "$OUTPUT_FILE"
-    echo "- Torrent Files:" >> "$OUTPUT_FILE"
-    ls -la "$TRANSMISSION_DIR/torrents/" >> "$OUTPUT_FILE" 2>/dev/null
-    echo "- Resume Files:" >> "$OUTPUT_FILE"
-    grep -Eo '"name": "[^"]+"' "$TRANSMISSION_DIR/resume/"*.resume >> "$OUTPUT_FILE" 2>/dev/null
-    echo "- Download Directory:" >> "$OUTPUT_FILE"
-    grep -Eo '"downloadDir": "[^"]+"' "$TRANSMISSION_DIR/settings.json" >> "$OUTPUT_FILE" 2>/dev/null
+    echo "- Torrent Files (Filtered by Date):" >> "$OUTPUT_FILE"
+    find "$TRANSMISSION_DIR/torrents/" -type f -newermt "2025-03-23" ! -newermt "2025-04-06" -exec ls -la {} \; >> "$OUTPUT_FILE" 2>/dev/null
 else
     echo "[-] No Transmission configuration found." >> "$OUTPUT_FILE"
 fi
@@ -28,28 +24,25 @@ fi
 echo "" >> "$OUTPUT_FILE"
 
 # qBittorrent Analysis
-echo "=== qBittorrent Analysis ===" >> "$OUTPUT_FILE"
+echo "=== qBittorrent Analysis (23 March - 5 April 2025) ===" >> "$OUTPUT_FILE"
 QBITTORRENT_DIR="$HOME/.config/qBittorrent"
 if [ -d "$QBITTORRENT_DIR" ]; then
     echo "[+] qBittorrent configuration found." >> "$OUTPUT_FILE"
-    echo "- Torrent Files:" >> "$OUTPUT_FILE"
-    ls -la "$QBITTORRENT_DIR/BT_backup/" >> "$OUTPUT_FILE" 2>/dev/null
-    echo "- Files Downloaded:" >> "$OUTPUT_FILE"
-    grep -Eo '"path": "[^"]+"' "$QBITTORRENT_DIR/BT_backup/"*.fastresume >> "$OUTPUT_FILE" 2>/dev/null
+    echo "- Files Downloaded (Filtered by Date):" >> "$OUTPUT_FILE"
+    find "$QBITTORRENT_DIR/BT_backup/" -type f -newermt "2025-03-23" ! -newermt "2025-04-06" -exec grep -Eo '"path": "[^"]+"' {} \; >> "$OUTPUT_FILE" 2>/dev/null
 else
     echo "[-] No qBittorrent configuration found." >> "$OUTPUT_FILE"
 fi
 
 echo "" >> "$OUTPUT_FILE"
 
-# System USB Analysis (dmesg)
-echo "=== USB Device Analysis ===" >> "$OUTPUT_FILE"
-dmesg --ctime | grep -i 'usb' >> "$OUTPUT_FILE"
-journalctl --grep="usb" --no-pager --output=short-iso >> "$OUTPUT_FILE" 2>/dev/null
+# System USB Analysis (Filtered by Date)
+echo "=== USB Device Analysis (23 March - 5 April 2025) ===" >> "$OUTPUT_FILE"
+journalctl --grep="usb" --since "2025-03-23" --until "2025-04-05" --no-pager --output=short-iso >> "$OUTPUT_FILE" 2>/dev/null
 
 echo "" >> "$OUTPUT_FILE"
 
-# Git Configuration Analysis
+# Git Configuration Analysis (No Date Filtering)
 echo "=== Git Configuration Analysis ===" >> "$OUTPUT_FILE"
 GIT_CONFIG="$HOME/.gitconfig"
 if [ -f "$GIT_CONFIG" ]; then
@@ -61,7 +54,7 @@ fi
 
 echo "" >> "$OUTPUT_FILE"
 
-# FileZilla Configuration Analysis
+# FileZilla Configuration Analysis (No Date Filtering)
 echo "=== FileZilla Configuration Analysis ===" >> "$OUTPUT_FILE"
 FILEZILLA_DIR="$HOME/.config/filezilla"
 if [ -d "$FILEZILLA_DIR" ]; then
