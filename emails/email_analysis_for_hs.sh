@@ -3,8 +3,8 @@
 # Script d’analyse SOC/MSP pour fichiers .eml — Version stable
 set -euo pipefail
 
-IPINFO_API_KEY="***REMOVED***"
-VT_API_KEY="***REMOVED***"
+IPINFO_API_KEY="put_your_token"
+VT_API_KEY="Put_your_key"
 RBL_LIST=("zen.spamhaus.org" "bl.spamcop.net" "b.barracudacentral.org" "dnsbl.sorbs.net")
 USER_AGENT="EmailSecAnalyzer/Stable"
 
